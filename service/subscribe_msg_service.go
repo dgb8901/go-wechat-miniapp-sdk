@@ -13,12 +13,12 @@ const (
 	subscribeMessageUrl string = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send"
 )
 
-type WxaSubscribeMsgService struct {
+type wxaSubscribeMsgService struct {
 	wxaService *wxaService
 }
 
 // 发送订阅消息
-func (msg *WxaSubscribeMsgService) Send(subMsg *request.SubscribeMsg) (*models.WxError, error) {
+func (msg *wxaSubscribeMsgService) Send(subMsg *request.SubscribeMsg) (*models.WxError, error) {
 	var result models.WxError
 	data := common.JsonToMap(common.ToJson(subMsg))
 	err := msg.wxaService.Post(subscribeMessageUrl, &data, &result)

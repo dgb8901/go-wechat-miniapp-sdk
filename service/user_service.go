@@ -13,12 +13,12 @@ const (
 	getPaidUnionId     string = "https://api.weixin.qq.com/wxa/getpaidunionid"
 )
 
-type WxaUserService struct {
+type wxaUserService struct {
 	wxaService *wxaService
 }
 
 // 用户登录
-func (user *WxaUserService) Jscode2Session(jscode string) (*response.JsCode2SessionResult, error) {
+func (user *wxaUserService) Jscode2Session(jscode string) (*response.JsCode2SessionResult, error) {
 	config := user.wxaService.GetWxaConfig()
 	var result response.JsCode2SessionResult
 	params := map[string]interface{}{
@@ -45,7 +45,7 @@ func (user *WxaUserService) Jscode2Session(jscode string) (*response.JsCode2Sess
 }
 
 // 用户支付完成后，获取该用户的 UnionId，无需用户授权
-func (user *WxaUserService) GetPaidUnionIdByTransactionId(openId, transactionId string) (unionid string, err error) {
+func (user *wxaUserService) GetPaidUnionIdByTransactionId(openId, transactionId string) (unionid string, err error) {
 
 	if common.IsBlank(openId) {
 		return "", errors.New("openId is blank")
@@ -74,7 +74,7 @@ func (user *WxaUserService) GetPaidUnionIdByTransactionId(openId, transactionId 
 }
 
 // 用户支付完成后，获取该用户的 UnionId，无需用户授权
-func (user *WxaUserService) GetPaidUnionIdByMchIdAndOutTradeNo(openId, mchId, outTradeNo string) (unionid string, err error) {
+func (user *wxaUserService) GetPaidUnionIdByMchIdAndOutTradeNo(openId, mchId, outTradeNo string) (unionid string, err error) {
 
 	if common.IsBlank(openId) {
 		return "", errors.New("openId is blank")

@@ -168,56 +168,52 @@ func (wxa *wxaService) CheckSignature(timestamp string, nonce string, signature 
 	return false
 }
 
-func (wxa *wxaService) SetWxaConfig(config *config.WxaInMemoryConfig) {
-	wxa.wxaConfig = config
-}
-
-func (wxa *wxaService) GetUserService() *WxaUserService {
+func (wxa *wxaService) GetUserService() *wxaUserService {
 	userService := services["userService"]
 	if userService == nil {
-		userService = &WxaUserService{wxaService: wxa}
+		userService = &wxaUserService{wxaService: wxa}
 		services["userService"] = userService
 	}
-	service := userService.(*WxaUserService)
+	service := userService.(*wxaUserService)
 	return service
 }
 
-func (wxa *wxaService) GetSubscribeMsgService() *WxaSubscribeMsgService {
+func (wxa *wxaService) GetSubscribeMsgService() *wxaSubscribeMsgService {
 	subscribeMsgService := services["subscribeMsgService"]
 	if subscribeMsgService == nil {
-		subscribeMsgService = &WxaSubscribeMsgService{wxaService: wxa}
+		subscribeMsgService = &wxaSubscribeMsgService{wxaService: wxa}
 		services["subscribeMsgService"] = subscribeMsgService
 	}
-	service := subscribeMsgService.(*WxaSubscribeMsgService)
+	service := subscribeMsgService.(*wxaSubscribeMsgService)
 	return service
 }
 
-func (wxa *wxaService) GetKfService() *WxaKfService {
+func (wxa *wxaService) GetKfService() *wxaKfService {
 	kfService := services["kfService"]
 	if kfService == nil {
-		kfService = &WxaKfService{wxaService: wxa}
+		kfService = &wxaKfService{wxaService: wxa}
 		services["kfService"] = kfService
 	}
-	service := kfService.(*WxaKfService)
+	service := kfService.(*wxaKfService)
 	return service
 }
 
-func (wxa *wxaService) GetUniformMessageService() *UniformMessageService {
+func (wxa *wxaService) GetUniformMessageService() *wxaUniformMessageService {
 	uniformMessageService := services["uniformMessageService"]
 	if uniformMessageService == nil {
-		uniformMessageService = &UniformMessageService{wxaService: wxa}
+		uniformMessageService = &wxaUniformMessageService{wxaService: wxa}
 		services["uniformMessageService"] = uniformMessageService
 	}
-	service := uniformMessageService.(*UniformMessageService)
+	service := uniformMessageService.(*wxaUniformMessageService)
 	return service
 }
 
-func (wxa *wxaService) GetQrCodeService() *QrCodeService {
+func (wxa *wxaService) GetQrCodeService() *wxaQrCodeService {
 	qrCodeService := services["qrCodeService"]
 	if qrCodeService == nil {
-		qrCodeService = &QrCodeService{wxaService: wxa}
+		qrCodeService = &wxaQrCodeService{wxaService: wxa}
 		services["qrCodeService"] = qrCodeService
 	}
-	service := qrCodeService.(*QrCodeService)
+	service := qrCodeService.(*wxaQrCodeService)
 	return service
 }

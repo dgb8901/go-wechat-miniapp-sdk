@@ -14,12 +14,12 @@ const (
 )
 
 // 统一服务消息
-type UniformMessageService struct {
+type wxaUniformMessageService struct {
 	wxaService *wxaService
 }
 
 // 发送服务消息
-func (un *UniformMessageService) Send(message *request.UniformMessage) (*models.WxError, error) {
+func (un *wxaUniformMessageService) Send(message *request.UniformMessage) (*models.WxError, error) {
 	var result models.WxError
 	data := common.JsonToMap(common.ToJson(message))
 	err := un.wxaService.Post(uniformSendUrl, &data, &result)

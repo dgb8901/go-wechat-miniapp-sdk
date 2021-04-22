@@ -36,7 +36,4 @@ type Service interface {
 	CheckSignature(timestamp string, nonce string, signature string) bool
 	// 获取WxaConfig配置
 	GetWxaConfig() *config.WxaInMemoryConfig
-	// 注入WxaConfig的实现
-	SetWxaConfig(config *config.WxaInMemoryConfig)
-
 }
