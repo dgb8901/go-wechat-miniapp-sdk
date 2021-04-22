@@ -6,3 +6,4 @@
 *.tmp
 *.exe
 vendor/
+.DS_Store
