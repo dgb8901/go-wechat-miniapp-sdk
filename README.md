@@ -1,14 +1,14 @@
-# go-wechat-sdk
+# go-wechat-miniapp-sdk
 
 #### 关于
 
 > 基于微信小程序相关接口封装，使用golang语言封装的一套微信小程序官方接口SDK
 >
-> 若在使用过程中出现bug,请到[issues](https://github.com/dgb8901/go-wechat-sdk/issues)提问.
+> 若在使用过程中出现bug,请到[issues](https://github.com/dgb8901/go-wechat-miniapp-sdk/issues)提问.
 
 #### 版本
 
-> 当前版本: [v1.0.2](https://github.com/dgb8901/go-wechat-sdk/releases/tag/v1.0.2)
+> 当前版本: [v1.0.2](https://github.com/dgb8901/go-wechat-miniapp-sdk/releases/tag/v1.0.2)
 
 #### 运行环境
 
