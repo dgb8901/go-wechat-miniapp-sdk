@@ -47,7 +47,7 @@ func Init() {
 		MsgDataFormat: "DataFormat",
 	}
 
-	wxaService := &service.WxaService{}
+	wxaService := &service.New(wxaConfig)
 	wxaService.SetWxaConfig(wxaConfig)
 
 	wxaHelper.wxaService = wxaService
