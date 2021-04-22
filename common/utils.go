@@ -2,7 +2,7 @@ package common
 
 import (
 	"encoding/json"
-	"github.com/wonderivan/logger"
+	"log"
 )
 
 // 对象转json
@@ -16,7 +16,7 @@ func JsonToMap(data string) map[string]interface{} {
 
 	var mapResult map[string]interface{}
 	if err := json.Unmarshal([]byte(data), &mapResult); err != nil {
-		logger.Error(err)
+		log.Print(err)
 	}
 	return mapResult
 }
