@@ -72,9 +72,10 @@ session, err := userService.Jscode2Session(jsCode)
 
 * [登录|用户信息](https://github.com/dgb8901/go-wechat-miniapp-sdk/blob/main/service/user_service.go)
 * [订阅消息](https://github.com/dgb8901/go-wechat-miniapp-sdk/blob/main/service/subscribe_msg_service.go)
-* 客服消息
-* 统一服务消息
-* 获取小程序码
+* [客服消息](https://github.com/dgb8901/go-wechat-miniapp-sdk/blob/main/service/kf_service.go)
+* [统一服务消息](https://github.com/dgb8901/go-wechat-miniapp-sdk/blob/main/service/uniform_message_service.go)
+* [获取小程序码](https://github.com/dgb8901/go-wechat-miniapp-sdk/blob/main/service/qr_code_service.go)
+* ...
 
 #### 联系我
 
