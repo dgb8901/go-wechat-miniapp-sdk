@@ -14,7 +14,7 @@ const (
 )
 
 type wxaSubscribeMsgService struct {
-	wxaService *wxaService
+	wxaService *WxaService
 }
 
 // 发送订阅消息

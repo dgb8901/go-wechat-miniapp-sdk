@@ -15,7 +15,7 @@ const (
 
 // 统一服务消息
 type wxaUniformMessageService struct {
-	wxaService *wxaService
+	wxaService *WxaService
 }
 
 // 发送服务消息

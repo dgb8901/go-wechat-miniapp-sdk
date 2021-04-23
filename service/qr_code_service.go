@@ -11,7 +11,7 @@ const (
 
 // 小程序码
 type wxaQrCodeService struct {
-	wxaService *wxaService
+	wxaService *WxaService
 }
 
 // 获取小程序二维码，适用于需要的码数量较少的业务场景。

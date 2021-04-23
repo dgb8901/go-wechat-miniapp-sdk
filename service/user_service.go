@@ -14,7 +14,7 @@ const (
 )
 
 type wxaUserService struct {
-	wxaService *wxaService
+	wxaService *WxaService
 }
 
 // 用户登录

@@ -16,7 +16,7 @@ const (
 
 // 客服
 type wxaKfService struct {
-	wxaService *wxaService
+	wxaService *WxaService
 }
 
 // 获取客服消息内的临时素材,即下载临时的多媒体文件。目前小程序仅支持下载图片文件。
