@@ -96,4 +96,4 @@ session, err := userService.Jscode2Session(jsCode)
 #### 接入小程序
 
 * 简易记账
-[简易记账](!https://www.itwork.club/img/qrcode.jpg)
+![简易记账](https://www.itwork.club/img/qrcode.jpg)
