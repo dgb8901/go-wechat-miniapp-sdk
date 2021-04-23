@@ -1,6 +1,8 @@
 package response
 
-import "go-wechat-miniapp-sdk/models"
+import (
+	"github.com/dgb8901/go-wechat-miniapp-sdk/models"
+)
 
 type GetTempMedia struct {
 	models.WxError

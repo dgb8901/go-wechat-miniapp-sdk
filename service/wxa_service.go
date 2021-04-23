@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/astaxie/beego/httplib"
-	"go-wechat-miniapp-sdk/config"
-	"go-wechat-miniapp-sdk/models/response"
+	"github.com/dgb8901/go-wechat-miniapp-sdk/config"
+	"github.com/dgb8901/go-wechat-miniapp-sdk/models/response"
 	"log"
 	"strings"
 )
@@ -13,11 +13,17 @@ import (
 var services = make(map[string]interface{})
 
 type wxaService struct {
-	wxaConfig *config.WxaInMemoryConfig
+	wxaConfig *config.Config
 }
 
-func New(wxaConfig *config.WxaInMemoryConfig) *wxaService {
-	return &wxaService{wxaConfig: wxaConfig}
+// 基于内存管理 access_token
+func NewInMemory(wxaConfig *config.WxaInMemoryConfig) *wxaService {
+	return &wxaService{wxaConfig: wxaConfig.GetConfig()}
+}
+
+// 基于Redis管理 access_token
+func NewInRedis(wxaConfig *config.WxaInRedisConfig) *wxaService {
+	return &wxaService{wxaConfig: wxaConfig.GetConfig()}
 }
 
 func (wxa *wxaService) Get(url string, params *map[string]interface{}, resp interface{}) error {
@@ -160,8 +166,8 @@ func (wxa *wxaService) GetAccessToken() (string, error) {
 	return accessToken.AccessToken, err
 }
 
-func (wxa *wxaService) GetWxaConfig() *config.WxaInMemoryConfig {
-	return wxa.wxaConfig
+func (wxa *wxaService) GetWxaConfig() *config.Config {
+	return wxa.wxaConfig.GetConfig()
 }
 
 func (wxa *wxaService) CheckSignature(timestamp string, nonce string, signature string) bool {

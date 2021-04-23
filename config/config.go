@@ -1,6 +1,17 @@
 package config
 
-type WxaConfig interface {
+type Config struct {
+	configInterface
+	AppId         string
+	Secret        string
+	Token         string
+	AesKey        string
+	MsgDataFormat string
+	AccessToken   string
+	ExpiresTime   int64
+}
+
+type configInterface interface {
 
 	// 获取appid
 	GetAppId() string
@@ -19,4 +30,7 @@ type WxaConfig interface {
 
 	// 更新access_token
 	UpdateAccessToken(accessToken string, expiresInSeconds int64)
+
+	// 获取配置信息
+	GetConfig() *Config
 }

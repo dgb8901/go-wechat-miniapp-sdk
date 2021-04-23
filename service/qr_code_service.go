@@ -1,7 +1,7 @@
 package service
 
 import (
-	"go-wechat-miniapp-sdk/models/request"
+	"github.com/dgb8901/go-wechat-miniapp-sdk/models/request"
 )
 
 const (

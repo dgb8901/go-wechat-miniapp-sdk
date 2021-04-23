@@ -1,9 +1,9 @@
 package service
 
 import (
+	"github.com/dgb8901/go-wechat-miniapp-sdk/common"
+	"github.com/dgb8901/go-wechat-miniapp-sdk/models/response"
 	"github.com/pkg/errors"
-	"go-wechat-miniapp-sdk/common"
-	"go-wechat-miniapp-sdk/models/response"
 	"log"
 )
 
