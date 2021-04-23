@@ -97,4 +97,6 @@ session, err := userService.Jscode2Session(jsCode)
 
 * 简易记账
 
-![简易记账](https://www.itwork.club/img/qrcode.jpg =240x240)
+<img src="https://www.itwork.club/img/qrcode.jpg" width="240" height="240" />
+
+
