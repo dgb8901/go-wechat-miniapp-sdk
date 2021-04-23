@@ -48,6 +48,7 @@ func Init() {
         MsgDataFormat: "DataFormat",
     }
     // wxaConfig := config.NewRedis(cfg,"127.0.0.1:6379","123456")
+	// wxaService := service.NewInRedis(redisConfig)
     wxaConfig := config.NewMemory(cfg)
     wxaService := service.NewInMemory(wxaConfig)
 

@@ -1,7 +1,6 @@
 package config
 
 type Config struct {
-	configInterface
 	AppId         string
 	Secret        string
 	Token         string

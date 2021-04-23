@@ -13,17 +13,19 @@ import (
 var services = make(map[string]interface{})
 
 type WxaService struct {
-	wxaConfig *config.Config
+	memory *config.WxaInMemoryConfig
+	redis  *config.WxaInRedisConfig
+	store  string
 }
 
 // 基于内存管理 access_token
 func NewInMemory(wxaConfig *config.WxaInMemoryConfig) *WxaService {
-	return &WxaService{wxaConfig: wxaConfig.GetConfig()}
+	return &WxaService{memory: wxaConfig, store: "memory"}
 }
 
 // 基于Redis管理 access_token
 func NewInRedis(wxaConfig *config.WxaInRedisConfig) *WxaService {
-	return &WxaService{wxaConfig: wxaConfig.GetConfig()}
+	return &WxaService{redis: wxaConfig, store: "redis"}
 }
 
 func (wxa *WxaService) Get(url string, params *map[string]interface{}, resp interface{}) error {
@@ -135,16 +137,33 @@ func (wxa *WxaService) execute(method string, uri string, params *map[string]int
 	return nil
 }
 
+// 更新access_token
+func (wxa *WxaService) updateAccessToken(accessToken string, expiresInSeconds int64) {
+	if wxa.store == "memory" {
+		wxa.memory.UpdateAccessToken(accessToken, expiresInSeconds)
+	} else if wxa.store == "redis" {
+		wxa.redis.UpdateAccessToken(accessToken, expiresInSeconds)
+	}
+}
+
+// 获取access_token
 func (wxa *WxaService) GetAccessToken() (string, error) {
 
-	if !wxa.wxaConfig.IsAccessTokenExpired() {
-		return wxa.wxaConfig.GetAccessToken(), nil
+	if wxa.store == "memory" {
+		if !wxa.memory.IsAccessTokenExpired() {
+			return wxa.memory.GetAccessToken(), nil
+		}
+	} else if wxa.store == "redis" {
+		if !wxa.redis.IsAccessTokenExpired() {
+			return wxa.redis.GetAccessToken(), nil
+		}
 	}
 
 	lock.Lock()
 	defer lock.Unlock()
 
-	url := fmt.Sprintf(getAccessTokenUrl, wxa.wxaConfig.GetAppId(), wxa.wxaConfig.GetSecret())
+	cfg := wxa.GetConfig()
+	url := fmt.Sprintf(getAccessTokenUrl, cfg.AppId, cfg.Secret)
 
 	request := httplib.Get(url)
 	request.Retries(3)
@@ -161,13 +180,19 @@ func (wxa *WxaService) GetAccessToken() (string, error) {
 		return "", err
 	}
 
-	wxa.wxaConfig.UpdateAccessToken(accessToken.AccessToken, accessToken.ExpiresIn)
+	wxa.updateAccessToken(accessToken.AccessToken, accessToken.ExpiresIn)
 
 	return accessToken.AccessToken, err
 }
 
-func (wxa *WxaService) GetWxaConfig() *config.Config {
-	return wxa.wxaConfig.GetConfig()
+func (wxa *WxaService) GetConfig() (cfg *config.Config) {
+
+	if wxa.store == "memory" {
+		return wxa.memory.GetConfig()
+	} else if wxa.store == "redis" {
+		return wxa.redis.GetConfig()
+	}
+	return nil
 }
 
 func (wxa *WxaService) CheckSignature(timestamp string, nonce string, signature string) bool {

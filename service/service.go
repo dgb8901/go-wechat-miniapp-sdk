@@ -34,6 +34,6 @@ type Service interface {
 	GetAccessToken() (string, error)
 	// 验证消息的确来自微信服务器.
 	CheckSignature(timestamp string, nonce string, signature string) bool
-	// 获取WxaConfig配置
-	GetWxaConfig() *config.Config
+	// 获取Config配置
+	GetConfig() *config.Config
 }
