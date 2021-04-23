@@ -12,29 +12,29 @@ import (
 
 var services = make(map[string]interface{})
 
-type wxaService struct {
+type WxaService struct {
 	wxaConfig *config.Config
 }
 
 // 基于内存管理 access_token
-func NewInMemory(wxaConfig *config.WxaInMemoryConfig) *wxaService {
-	return &wxaService{wxaConfig: wxaConfig.GetConfig()}
+func NewInMemory(wxaConfig *config.WxaInMemoryConfig) *WxaService {
+	return &WxaService{wxaConfig: wxaConfig.GetConfig()}
 }
 
 // 基于Redis管理 access_token
-func NewInRedis(wxaConfig *config.WxaInRedisConfig) *wxaService {
-	return &wxaService{wxaConfig: wxaConfig.GetConfig()}
+func NewInRedis(wxaConfig *config.WxaInRedisConfig) *WxaService {
+	return &WxaService{wxaConfig: wxaConfig.GetConfig()}
 }
 
-func (wxa *wxaService) Get(url string, params *map[string]interface{}, resp interface{}) error {
+func (wxa *WxaService) Get(url string, params *map[string]interface{}, resp interface{}) error {
 	return wxa.execute(GET, url, params, resp)
 }
 
-func (wxa *wxaService) Post(url string, data *map[string]interface{}, resp interface{}) error {
+func (wxa *WxaService) Post(url string, data *map[string]interface{}, resp interface{}) error {
 	return wxa.execute(POST, url, data, resp)
 }
 
-func (wxa *wxaService) GetFile(url string, params *map[string]interface{}) ([]byte, error) {
+func (wxa *WxaService) GetFile(url string, params *map[string]interface{}) ([]byte, error) {
 	var err error
 	if strings.Contains(url, "access_token=") {
 		err = errors.New("The uri can't concat symbol access_token:" + url)
@@ -65,7 +65,7 @@ func (wxa *wxaService) GetFile(url string, params *map[string]interface{}) ([]by
 	return resp, err
 }
 
-func (wxa *wxaService) PostFile(url string, data *map[string]interface{}) ([]byte, error) {
+func (wxa *WxaService) PostFile(url string, data *map[string]interface{}) ([]byte, error) {
 	var err error
 	if strings.Contains(url, "access_token=") {
 		err = errors.New("The uri can't concat symbol access_token:%s" + url)
@@ -94,7 +94,7 @@ func (wxa *wxaService) PostFile(url string, data *map[string]interface{}) ([]byt
 	return resp, err
 }
 
-func (wxa *wxaService) execute(method string, uri string, params *map[string]interface{}, resp interface{}) error {
+func (wxa *WxaService) execute(method string, uri string, params *map[string]interface{}, resp interface{}) error {
 
 	var err error
 	if strings.Contains(uri, "access_token=") {
@@ -135,7 +135,7 @@ func (wxa *wxaService) execute(method string, uri string, params *map[string]int
 	return nil
 }
 
-func (wxa *wxaService) GetAccessToken() (string, error) {
+func (wxa *WxaService) GetAccessToken() (string, error) {
 
 	if !wxa.wxaConfig.IsAccessTokenExpired() {
 		return wxa.wxaConfig.GetAccessToken(), nil
@@ -166,15 +166,15 @@ func (wxa *wxaService) GetAccessToken() (string, error) {
 	return accessToken.AccessToken, err
 }
 
-func (wxa *wxaService) GetWxaConfig() *config.Config {
+func (wxa *WxaService) GetWxaConfig() *config.Config {
 	return wxa.wxaConfig.GetConfig()
 }
 
-func (wxa *wxaService) CheckSignature(timestamp string, nonce string, signature string) bool {
+func (wxa *WxaService) CheckSignature(timestamp string, nonce string, signature string) bool {
 	return false
 }
 
-func (wxa *wxaService) GetUserService() *wxaUserService {
+func (wxa *WxaService) GetUserService() *wxaUserService {
 	userService := services["userService"]
 	if userService == nil {
 		userService = &wxaUserService{wxaService: wxa}
@@ -184,7 +184,7 @@ func (wxa *wxaService) GetUserService() *wxaUserService {
 	return service
 }
 
-func (wxa *wxaService) GetSubscribeMsgService() *wxaSubscribeMsgService {
+func (wxa *WxaService) GetSubscribeMsgService() *wxaSubscribeMsgService {
 	subscribeMsgService := services["subscribeMsgService"]
 	if subscribeMsgService == nil {
 		subscribeMsgService = &wxaSubscribeMsgService{wxaService: wxa}
@@ -194,7 +194,7 @@ func (wxa *wxaService) GetSubscribeMsgService() *wxaSubscribeMsgService {
 	return service
 }
 
-func (wxa *wxaService) GetKfService() *wxaKfService {
+func (wxa *WxaService) GetKfService() *wxaKfService {
 	kfService := services["kfService"]
 	if kfService == nil {
 		kfService = &wxaKfService{wxaService: wxa}
@@ -204,7 +204,7 @@ func (wxa *wxaService) GetKfService() *wxaKfService {
 	return service
 }
 
-func (wxa *wxaService) GetUniformMessageService() *wxaUniformMessageService {
+func (wxa *WxaService) GetUniformMessageService() *wxaUniformMessageService {
 	uniformMessageService := services["uniformMessageService"]
 	if uniformMessageService == nil {
 		uniformMessageService = &wxaUniformMessageService{wxaService: wxa}
@@ -214,7 +214,7 @@ func (wxa *wxaService) GetUniformMessageService() *wxaUniformMessageService {
 	return service
 }
 
-func (wxa *wxaService) GetQrCodeService() *wxaQrCodeService {
+func (wxa *WxaService) GetQrCodeService() *wxaQrCodeService {
 	qrCodeService := services["qrCodeService"]
 	if qrCodeService == nil {
 		qrCodeService = &wxaQrCodeService{wxaService: wxa}

@@ -33,4 +33,6 @@ type configInterface interface {
 
 	// 获取配置信息
 	GetConfig() *Config
+	// 设置配置信息
+	SetConfig(cfg *Config)
 }

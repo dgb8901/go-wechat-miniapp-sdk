@@ -7,6 +7,10 @@ type WxaInMemoryConfig struct {
 	cfg *Config
 }
 
+func NewMemory(cfg *Config) *WxaInMemoryConfig {
+	return &WxaInMemoryConfig{cfg: cfg}
+}
+
 // 获取appid
 func (config *WxaInMemoryConfig) GetAppId() string {
 	return config.cfg.AppId
@@ -40,4 +44,8 @@ func (config *WxaInMemoryConfig) UpdateAccessToken(accessToken string, expiresIn
 
 func (config *WxaInMemoryConfig) GetConfig() *Config {
 	return config.cfg
+}
+
+func (config *WxaInMemoryConfig) SetConfig(cfg *Config) {
+	config.cfg = cfg
 }

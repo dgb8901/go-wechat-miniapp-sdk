@@ -7,6 +7,10 @@ type WxaInRedisConfig struct {
 	cfg *Config
 }
 
+func NewRedis(cfg *Config) *WxaInRedisConfig {
+	return &WxaInRedisConfig{cfg: cfg}
+}
+
 // 获取appid
 func (config *WxaInRedisConfig) GetAppId() string {
 	return config.cfg.AppId
@@ -40,4 +44,8 @@ func (config *WxaInRedisConfig) UpdateAccessToken(accessToken string, expiresInS
 
 func (config *WxaInRedisConfig) GetConfig() *Config {
 	return config.cfg
+}
+
+func (config *WxaInRedisConfig) SetConfig(cfg *Config) {
+	config.cfg = cfg
 }
