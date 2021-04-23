@@ -8,7 +8,7 @@
 
 #### 版本
 
-> 当前版本: [v1.0.0-alpha](https://github.com/dgb8901/go-wechat-miniapp-sdk/releases/tag/v1.0.0-alpha)
+> 当前版本: [v1.0.0](https://github.com/dgb8901/go-wechat-miniapp-sdk/releases/tag/v1.0.0)
 
 #### 运行环境
 
@@ -29,26 +29,29 @@ package helper
 
 import (
 	"github.com/dgb8901/go-wechat-miniapp-sdk/config"
-	"github.com/dgb8901/go-wechat-miniapp-sdk/service"
+    "github.com/dgb8901/go-wechat-miniapp-sdk/service"
 )
 
-type WxaHelper struct {
+type wxaHelper struct {
 	wxaService *service.WxaService
 }
 
-var wxaHelper = &WxaHelper{}
+var helper = &wxaHelper{}
 
 func Init() {
-	wxaConfig := &config.WxaInMemoryConfig{
-		AppId:         "AppId",
-		Secret:        "Secret",
-		Token:         "Token",
-		AesKey:        "AesKey",
-		MsgDataFormat: "DataFormat",
-	}
 
-	wxaService := &service.New(wxaConfig)
-	wxaHelper.wxaService = wxaService
+    cfg := &config.Config{
+        AppId:         "AppId",
+        Secret:        "Secret",
+        Token:         "Token",
+        AesKey:        "AesKey",
+        MsgDataFormat: "DataFormat",
+    }
+    // wxaConfig := config.NewRedis(cfg,"127.0.0.1:6379","123456")
+    wxaConfig := config.NewMemory(cfg)
+    wxaService := service.NewInMemory(wxaConfig)
+
+    helper.wxaService = wxaService
 }
 
 func GetWxaService() *service.WxaService {
@@ -88,3 +91,8 @@ session, err := userService.Jscode2Session(jsCode)
 #### License
 
 > MIT License, see [license file](https://github.com/dgb8901/go-wechat-miniapp-sdk/blob/main/License)
+
+#### 接入小程序
+
+* 简易记账
+[简易记账](!https://www.itwork.club/img/qrcode.jpg)
