@@ -1,4 +1,4 @@
-module go-wechat-miniapp-sdk
+module github.com/dgb8901/go-wechat-miniapp-sdk
 
 go 1.14
 
