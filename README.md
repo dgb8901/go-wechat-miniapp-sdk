@@ -47,9 +47,9 @@ func Init() {
         AesKey:        "AesKey",
         MsgDataFormat: "DataFormat",
     }
-    // wxaConfig := config.NewRedis(cfg,"127.0.0.1:6379","123456")
+    // wxaConfig := config.NewInRedis(cfg,"127.0.0.1:6379","123456")
 	// wxaService := service.NewInRedis(redisConfig)
-    wxaConfig := config.NewMemory(cfg)
+    wxaConfig := config.NewInMemory(cfg)
     wxaService := service.NewService(wxaConfig)
 
     helper.wxaService = wxaService
