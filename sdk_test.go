@@ -16,7 +16,7 @@ func Test_sdk(t *testing.T) {
 		AesKey:        "",
 		MsgDataFormat: "JSON",
 	}
-	//redisConfig := config.NewInRedis(cfg,"10.19.9.16:6379","")
+	//redisConfig := config.NewInRedis(cfg,"127.0.0.1:6379","")
 	memory := config.NewInMemory(cfg)
 	wxaService := service.NewService(memory)
 	userService := wxaService.GetUserService()
