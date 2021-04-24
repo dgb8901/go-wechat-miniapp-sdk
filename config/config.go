@@ -1,16 +1,14 @@
 package config
 
-type Config struct {
+type Cfg struct {
 	AppId         string
 	Secret        string
 	Token         string
 	AesKey        string
 	MsgDataFormat string
-	AccessToken   string
-	ExpiresTime   int64
 }
 
-type configInterface interface {
+type CfgInterface interface {
 
 	// 获取appid
 	GetAppId() string
@@ -31,7 +29,7 @@ type configInterface interface {
 	UpdateAccessToken(accessToken string, expiresInSeconds int64)
 
 	// 获取配置信息
-	GetConfig() *Config
+	GetConfig() *Cfg
 	// 设置配置信息
-	SetConfig(cfg *Config)
+	SetConfig(cfg *Cfg)
 }

@@ -19,7 +19,7 @@ type wxaUserService struct {
 
 // 用户登录
 func (user *wxaUserService) Jscode2Session(jscode string) (*response.JsCode2SessionResult, error) {
-	config := user.wxaService.GetConfig()
+	config := user.wxaService.cfg.GetConfig()
 	var result response.JsCode2SessionResult
 	params := map[string]interface{}{
 		"appid":      config.AppId,
