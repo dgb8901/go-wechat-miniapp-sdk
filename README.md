@@ -28,12 +28,12 @@
 package helper
 
 import (
-	"github.com/dgb8901/go-wechat-miniapp-sdk/config"
+    "github.com/dgb8901/go-wechat-miniapp-sdk/config"
     "github.com/dgb8901/go-wechat-miniapp-sdk/service"
 )
 
 type wxaHelper struct {
-	wxaService *service.WxaService
+    wxaService *service.WxaService
 }
 
 var helper = &wxaHelper{}
@@ -48,7 +48,7 @@ func Init() {
         MsgDataFormat: "DataFormat",
     }
     // wxaConfig := config.NewInRedis(cfg,"127.0.0.1:6379","123456")
-	// wxaService := service.NewInRedis(redisConfig)
+    // wxaService := service.NewInRedis(redisConfig)
     wxaConfig := config.NewInMemory(cfg)
     wxaService := service.NewService(wxaConfig)
 
@@ -56,7 +56,7 @@ func Init() {
 }
 
 func GetWxaService() *service.WxaService {
-	return wxaHelper.wxaService
+    return wxaHelper.wxaService
 }
 
 ```
