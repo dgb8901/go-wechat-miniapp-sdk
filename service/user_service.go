@@ -17,7 +17,7 @@ type wxaUserService struct {
 	wxaService *WxaService
 }
 
-// 用户登录
+// Jscode2Session 用户登录
 func (user *wxaUserService) Jscode2Session(jscode string) (*response.JsCode2SessionResult, error) {
 	config := user.wxaService.cfg.GetConfig()
 	var result response.JsCode2SessionResult
@@ -44,7 +44,7 @@ func (user *wxaUserService) Jscode2Session(jscode string) (*response.JsCode2Sess
 	return &result, nil
 }
 
-// 用户支付完成后，获取该用户的 UnionId，无需用户授权
+// GetPaidUnionIdByTransactionId 用户支付完成后，获取该用户的 UnionId，无需用户授权
 func (user *wxaUserService) GetPaidUnionIdByTransactionId(openId, transactionId string) (unionid string, err error) {
 
 	if common.IsBlank(openId) {
@@ -73,7 +73,7 @@ func (user *wxaUserService) GetPaidUnionIdByTransactionId(openId, transactionId 
 	return result.Unionid, nil
 }
 
-// 用户支付完成后，获取该用户的 UnionId，无需用户授权
+// GetPaidUnionIdByMchIdAndOutTradeNo 用户支付完成后，获取该用户的 UnionId，无需用户授权
 func (user *wxaUserService) GetPaidUnionIdByMchIdAndOutTradeNo(openId, mchId, outTradeNo string) (unionid string, err error) {
 
 	if common.IsBlank(openId) {

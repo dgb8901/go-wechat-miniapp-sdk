@@ -18,7 +18,7 @@ type wxaUniformMessageService struct {
 	wxaService *WxaService
 }
 
-// 发送服务消息
+// Send 发送服务消息
 func (un *wxaUniformMessageService) Send(message *request.UniformMessage) (*models.WxError, error) {
 	var result models.WxError
 	data := common.JsonToMap(common.ToJson(message))

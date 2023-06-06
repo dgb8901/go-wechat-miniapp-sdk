@@ -8,28 +8,28 @@ type Cfg struct {
 	MsgDataFormat string
 }
 
-type CfgInterface interface {
+type Config interface {
 
-	// 获取appid
+	// GetAppId 获取appid
 	GetAppId() string
 
-	// 获取Secret
+	// GetSecret 获取Secret
 	GetSecret() string
 
-	// 获取access_token
+	// GetAccessToken 获取access_token
 	GetAccessToken() string
 
-	// access_token是否过期
+	// IsAccessTokenExpired access_token是否过期
 	IsAccessTokenExpired() bool
 
-	// 强制过期access_token
+	// ExpiredAccessToken 强制过期access_token
 	ExpiredAccessToken()
 
-	// 更新access_token
+	// UpdateAccessToken 更新access_token
 	UpdateAccessToken(accessToken string, expiresInSeconds int64)
 
-	// 获取配置信息
+	// GetConfig 获取配置信息
 	GetConfig() *Cfg
-	// 设置配置信息
+	// SetConfig 设置配置信息
 	SetConfig(cfg *Cfg)
 }
