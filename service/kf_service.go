@@ -19,7 +19,7 @@ type wxaKfService struct {
 	wxaService *WxaService
 }
 
-// 获取客服消息内的临时素材,即下载临时的多媒体文件。目前小程序仅支持下载图片文件。
+// GetTempMedia 获取客服消息内的临时素材,即下载临时的多媒体文件。目前小程序仅支持下载图片文件。
 func (kf *wxaKfService) GetTempMedia(mediaId string) ([]byte, error) {
 
 	if common.IsBlank(mediaId) {
@@ -34,7 +34,7 @@ func (kf *wxaKfService) GetTempMedia(mediaId string) ([]byte, error) {
 	return resp, err
 }
 
-// 发送客服消息
+// Send 发送客服消息
 func (kf *wxaKfService) Send(message *request.SendKfMessage) (*models.WxError, error) {
 
 	var result models.WxError
@@ -57,7 +57,7 @@ func (kf *wxaKfService) Send(message *request.SendKfMessage) (*models.WxError, e
 	return &result, nil
 }
 
-// 下发客服当前输入状态给用户
+// SetTyping 下发客服当前输入状态给用户
 func (kf *wxaKfService) SetTyping(typing request.SetTyping) (*models.WxError, error) {
 
 	if typing.Command != "Typing" {

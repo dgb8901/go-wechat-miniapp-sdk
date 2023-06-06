@@ -12,7 +12,7 @@ type wxaInRedisConfig struct {
 	pool *redis.Pool
 }
 
-// 初始化redis配置
+// NewInRedis 初始化redis配置
 func NewInRedis(cfg *Cfg, server, password string) *wxaInRedisConfig {
 	pool := &redis.Pool{
 		MaxIdle:     5, //空闲数
@@ -42,21 +42,21 @@ func NewInRedis(cfg *Cfg, server, password string) *wxaInRedisConfig {
 	return &wxaInRedisConfig{cfg: cfg, pool: pool}
 }
 
-// 获取appid
-func (config *wxaInRedisConfig) GetAppId() string {
-	return config.cfg.AppId
+// GetAppId 获取appid
+func (c *wxaInRedisConfig) GetAppId() string {
+	return c.cfg.AppId
 }
 
-// 获取Secret
-func (config *wxaInRedisConfig) GetSecret() string {
-	return config.cfg.Secret
+// GetSecret 获取Secret
+func (c *wxaInRedisConfig) GetSecret() string {
+	return c.cfg.Secret
 }
 
-// 获取access_token
-func (config *wxaInRedisConfig) GetAccessToken() string {
-	conn := config.pool.Get()
+// GetAccessToken 获取access_token
+func (c *wxaInRedisConfig) GetAccessToken() string {
+	conn := c.pool.Get()
 	defer conn.Close()
-	value, err := redis.String(conn.Do("GET", config.cfg.AppId))
+	value, err := redis.String(conn.Do("GET", c.cfg.AppId))
 	log.Printf("redis-->GetValue:%s", value)
 	if err != nil {
 		value = ""
@@ -65,11 +65,11 @@ func (config *wxaInRedisConfig) GetAccessToken() string {
 	return value
 }
 
-// access_token是否过期
-func (config *wxaInRedisConfig) IsAccessTokenExpired() bool {
-	conn := config.pool.Get()
+// IsAccessTokenExpired access_token是否过期
+func (c *wxaInRedisConfig) IsAccessTokenExpired() bool {
+	conn := c.pool.Get()
 	defer conn.Close()
-	b, err := redis.Bool(conn.Do("EXISTS", config.cfg.AppId))
+	b, err := redis.Bool(conn.Do("EXISTS", c.cfg.AppId))
 	if err != nil {
 		log.Printf("redis-->Exists:%s", err.Error())
 		return false
@@ -77,33 +77,33 @@ func (config *wxaInRedisConfig) IsAccessTokenExpired() bool {
 	return b
 }
 
-// 强制过期access_token
-func (config *wxaInRedisConfig) ExpiredAccessToken() {
-	conn := config.pool.Get()
+// ExpiredAccessToken 强制过期access_token
+func (c *wxaInRedisConfig) ExpiredAccessToken() {
+	conn := c.pool.Get()
 	defer conn.Close()
-	do, err := conn.Do("DEL", config.cfg.AppId)
+	do, err := conn.Do("DEL", c.cfg.AppId)
 	log.Printf("redis-->Delete:%s", do)
 	if err != nil {
 		log.Printf("redis-->Delete:%s", err.Error())
 	}
 }
 
-// 更新access_token
-func (config *wxaInRedisConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
-	conn := config.pool.Get()
+// UpdateAccessToken 更新access_token
+func (c *wxaInRedisConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
+	conn := c.pool.Get()
 	defer conn.Close()
 	expireTime := time.Now().Unix() + (expiresInSeconds - 200)
-	do, err := conn.Do("SET", config.cfg.AppId, accessToken, "EX", expireTime)
+	do, err := conn.Do("SET", c.cfg.AppId, accessToken, "EX", expireTime)
 	log.Printf("redis-->SetExpire:%s", do)
 	if err != nil {
 		log.Printf("redis-->SetExpire:%s", err.Error())
 	}
 }
 
-func (config *wxaInRedisConfig) GetConfig() *Cfg {
-	return config.cfg
+func (c *wxaInRedisConfig) GetConfig() *Cfg {
+	return c.cfg
 }
 
-func (config *wxaInRedisConfig) SetConfig(cfg *Cfg) {
-	config.cfg = cfg
+func (c *wxaInRedisConfig) SetConfig(cfg *Cfg) {
+	c.cfg = cfg
 }

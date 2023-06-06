@@ -13,41 +13,41 @@ func NewInMemory(cfg *Cfg) *wxaInMemoryConfig {
 	return &wxaInMemoryConfig{cfg: cfg}
 }
 
-// 获取appid
-func (config *wxaInMemoryConfig) GetAppId() string {
-	return config.cfg.AppId
+// GetAppId 获取appid
+func (c *wxaInMemoryConfig) GetAppId() string {
+	return c.cfg.AppId
 }
 
-// 获取Secret
-func (config *wxaInMemoryConfig) GetSecret() string {
-	return config.cfg.Secret
+// GetSecret 获取Secret
+func (c *wxaInMemoryConfig) GetSecret() string {
+	return c.cfg.Secret
 }
 
-// 获取access_token
-func (config *wxaInMemoryConfig) GetAccessToken() string {
-	return config.accessToken
+// GetAccessToken 获取access_token
+func (c *wxaInMemoryConfig) GetAccessToken() string {
+	return c.accessToken
 }
 
-// access_token是否过期
-func (config *wxaInMemoryConfig) IsAccessTokenExpired() bool {
-	return time.Now().Unix() > config.expiresTime
+// IsAccessTokenExpired access_token是否过期
+func (c *wxaInMemoryConfig) IsAccessTokenExpired() bool {
+	return time.Now().Unix() > c.expiresTime
 }
 
-// 强制过期access_token
-func (config *wxaInMemoryConfig) ExpiredAccessToken() {
-	config.expiresTime = 0
+// ExpiredAccessToken 强制过期access_token
+func (c *wxaInMemoryConfig) ExpiredAccessToken() {
+	c.expiresTime = 0
 }
 
-// 更新access_token
-func (config *wxaInMemoryConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
-	config.accessToken = accessToken
-	config.expiresTime = time.Now().Unix() + (expiresInSeconds - 200)
+// UpdateAccessToken 更新access_token
+func (c *wxaInMemoryConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
+	c.accessToken = accessToken
+	c.expiresTime = time.Now().Unix() + (expiresInSeconds - 200)
 }
 
-func (config *wxaInMemoryConfig) GetConfig() *Cfg {
-	return config.cfg
+func (c *wxaInMemoryConfig) GetConfig() *Cfg {
+	return c.cfg
 }
 
-func (config *wxaInMemoryConfig) SetConfig(cfg *Cfg) {
-	config.cfg = cfg
+func (c *wxaInMemoryConfig) SetConfig(cfg *Cfg) {
+	c.cfg = cfg
 }

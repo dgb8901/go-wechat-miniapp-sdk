@@ -13,10 +13,10 @@ import (
 var services = make(map[string]interface{})
 
 type WxaService struct {
-	cfg config.CfgInterface
+	cfg config.Config
 }
 
-func NewService(cfg config.CfgInterface) *WxaService {
+func NewService(cfg config.Config) *WxaService {
 	return &WxaService{cfg: cfg}
 }
 
@@ -129,7 +129,7 @@ func (wxa *WxaService) execute(method string, uri string, params *map[string]int
 	return nil
 }
 
-// 获取access_token
+// GetAccessToken 获取access_token
 func (wxa *WxaService) GetAccessToken() (string, error) {
 
 	if !wxa.cfg.IsAccessTokenExpired() {

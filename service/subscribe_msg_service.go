@@ -17,7 +17,7 @@ type wxaSubscribeMsgService struct {
 	wxaService *WxaService
 }
 
-// 发送订阅消息
+// Send 发送订阅消息
 func (msg *wxaSubscribeMsgService) Send(subMsg *request.SubscribeMsg) (*models.WxError, error) {
 	var result models.WxError
 	data := common.JsonToMap(common.ToJson(subMsg))

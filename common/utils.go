@@ -5,13 +5,13 @@ import (
 	"log"
 )
 
-// 对象转json
+// ToJson 对象转json
 func ToJson(md interface{}) string {
 	bytes, _ := json.Marshal(md)
 	return string(bytes)
 }
 
-// json 转 map
+// JsonToMap json 转 map
 func JsonToMap(data string) map[string]interface{} {
 
 	var mapResult map[string]interface{}
@@ -21,12 +21,12 @@ func JsonToMap(data string) map[string]interface{} {
 	return mapResult
 }
 
-// 判断字符串为空
+// IsBlank 判断字符串为空
 func IsBlank(s string) bool {
 	return s == ""
 }
 
-// 判断字符串不为空
+// IsNotBlank 判断字符串不为空
 func IsNotBlank(s string) bool {
 	return s != ""
 }
