@@ -1,28 +1,33 @@
 package config
 
 import (
-	"github.com/gomodule/redigo/redis"
 	"log"
 	"time"
+
+	"github.com/dgb8901/go-wechat-miniapp-sdk/common"
+	"github.com/gomodule/redigo/redis"
 )
 
-// 基于redis配置
-type wxaInRedisConfig struct {
-	cfg  *Cfg
+// RedisConfig 基于redis配置
+type RedisConfig struct {
+	cfg  *Config
 	pool *redis.Pool
 }
 
 // NewInRedis 初始化redis配置
-func NewInRedis(cfg *Cfg, server, password string) *wxaInRedisConfig {
+func NewInRedis(cfg *Config) CfgInterface {
+	if common.IsBlank(cfg.Server) {
+		panic("redis server is empty")
+	}
 	pool := &redis.Pool{
 		MaxIdle:     5, //空闲数
 		IdleTimeout: 240 * time.Second,
 		MaxActive:   10, //最大数
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", server,
+			c, err := redis.Dial("tcp", cfg.Server,
 				redis.DialReadTimeout(time.Second*10),
 				redis.DialConnectTimeout(time.Second*30),
-				redis.DialPassword(password),
+				redis.DialPassword(cfg.Password),
 				redis.DialDatabase(0),
 			)
 			if err != nil {
@@ -39,21 +44,21 @@ func NewInRedis(cfg *Cfg, server, password string) *wxaInRedisConfig {
 			return err
 		},
 	}
-	return &wxaInRedisConfig{cfg: cfg, pool: pool}
+	return &RedisConfig{cfg: cfg, pool: pool}
 }
 
 // GetAppId 获取appid
-func (c *wxaInRedisConfig) GetAppId() string {
+func (c *RedisConfig) GetAppId() string {
 	return c.cfg.AppId
 }
 
 // GetSecret 获取Secret
-func (c *wxaInRedisConfig) GetSecret() string {
+func (c *RedisConfig) GetSecret() string {
 	return c.cfg.Secret
 }
 
 // GetAccessToken 获取access_token
-func (c *wxaInRedisConfig) GetAccessToken() string {
+func (c *RedisConfig) GetAccessToken() string {
 	conn := c.pool.Get()
 	defer conn.Close()
 	value, err := redis.String(conn.Do("GET", c.cfg.AppId))
@@ -66,7 +71,7 @@ func (c *wxaInRedisConfig) GetAccessToken() string {
 }
 
 // IsAccessTokenExpired access_token是否过期
-func (c *wxaInRedisConfig) IsAccessTokenExpired() bool {
+func (c *RedisConfig) IsAccessTokenExpired() bool {
 	conn := c.pool.Get()
 	defer conn.Close()
 	b, err := redis.Bool(conn.Do("EXISTS", c.cfg.AppId))
@@ -78,7 +83,7 @@ func (c *wxaInRedisConfig) IsAccessTokenExpired() bool {
 }
 
 // ExpiredAccessToken 强制过期access_token
-func (c *wxaInRedisConfig) ExpiredAccessToken() {
+func (c *RedisConfig) ExpiredAccessToken() {
 	conn := c.pool.Get()
 	defer conn.Close()
 	do, err := conn.Do("DEL", c.cfg.AppId)
@@ -89,7 +94,7 @@ func (c *wxaInRedisConfig) ExpiredAccessToken() {
 }
 
 // UpdateAccessToken 更新access_token
-func (c *wxaInRedisConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
+func (c *RedisConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
 	conn := c.pool.Get()
 	defer conn.Close()
 	expireTime := time.Now().Unix() + (expiresInSeconds - 200)
@@ -100,10 +105,10 @@ func (c *wxaInRedisConfig) UpdateAccessToken(accessToken string, expiresInSecond
 	}
 }
 
-func (c *wxaInRedisConfig) GetConfig() *Cfg {
+func (c *RedisConfig) GetConfig() *Config {
 	return c.cfg
 }
 
-func (c *wxaInRedisConfig) SetConfig(cfg *Cfg) {
+func (c *RedisConfig) SetConfig(cfg *Config) {
 	c.cfg = cfg
 }

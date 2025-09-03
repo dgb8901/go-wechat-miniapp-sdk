@@ -1,14 +1,19 @@
 package config
 
-type Cfg struct {
+type Config struct {
 	AppId         string
 	Secret        string
 	Token         string
 	AesKey        string
 	MsgDataFormat string
+
+	// Server Redis host 地址 如：127.0.0.1:6379
+	Server string
+	// Password Redis 密码
+	Password string
 }
 
-type Config interface {
+type CfgInterface interface {
 
 	// GetAppId 获取appid
 	GetAppId() string
@@ -29,7 +34,7 @@ type Config interface {
 	UpdateAccessToken(accessToken string, expiresInSeconds int64)
 
 	// GetConfig 获取配置信息
-	GetConfig() *Cfg
+	GetConfig() *Config
 	// SetConfig 设置配置信息
-	SetConfig(cfg *Cfg)
+	SetConfig(cfg *Config)
 }

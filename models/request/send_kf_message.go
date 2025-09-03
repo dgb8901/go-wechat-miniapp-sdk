@@ -1,6 +1,6 @@
 package request
 
-// 发送客服消息请求参数
+// SendKfMessage 发送客服消息请求参数
 type SendKfMessage struct {
 	// 用户的 OpenID
 	ToUser string `json:"touser"`
@@ -16,19 +16,19 @@ type SendKfMessage struct {
 	MiniProgramPage MiniProgramPage `json:"miniprogrampage"`
 }
 
-// text 的结构
+// Text 的结构
 type Text struct {
 	// 文本消息内容
 	Content string `json:"content"`
 }
 
-// image 的结构
+// Image 的结构
 type Image struct {
 	// 发送的图片的媒体ID，通过 新增素材接口 上传图片文件获得。
 	MediaId string `json:"media_id"`
 }
 
-// link 的结构
+// Link 的结构
 type Link struct {
 	// 消息标题
 	Title string `json:"title"`
@@ -41,7 +41,7 @@ type Link struct {
 	ThumbUrl string `json:"thumb_url"`
 }
 
-// miniprogrampage 的结构
+// MiniProgramPage 的结构
 type MiniProgramPage struct {
 	// 消息标题
 	Title string `json:"title"`

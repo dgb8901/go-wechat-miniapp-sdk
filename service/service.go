@@ -7,9 +7,9 @@ import (
 const (
 	// 获取access_token请求地址
 	getAccessTokenUrl string = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
-	// 重试次数
+	// Retries 重试次数
 	Retries int = 3
-	// 请求方法
+	// GET 请求方法
 	GET    string = "GET"
 	POST   string = "POST"
 	DELETE string = "DELETE"

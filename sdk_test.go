@@ -1,24 +1,24 @@
 package go_wechat_miniapp_sdk
 
 import (
+	"log"
+	"testing"
+
 	"github.com/dgb8901/go-wechat-miniapp-sdk/common"
 	"github.com/dgb8901/go-wechat-miniapp-sdk/config"
 	"github.com/dgb8901/go-wechat-miniapp-sdk/service"
-	"log"
-	"testing"
 )
 
 func Test_sdk(t *testing.T) {
-	cfg := &config.Cfg{
+	cfg := &config.Config{
 		AppId:         "",
 		Secret:        "",
 		Token:         "",
 		AesKey:        "",
 		MsgDataFormat: "JSON",
 	}
-	//redisConfig := config.NewInRedis(cfg,"127.0.0.1:6379","")
-	memory := config.NewInMemory(cfg)
-	wxaService := service.NewService(memory)
+
+	wxaService := service.NewInMemoryService(cfg)
 	userService := wxaService.GetUserService()
 
 	session, err := userService.Jscode2Session("091Hdq100gkbBL10Dg300Xa1BF4Hdq16")

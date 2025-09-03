@@ -2,10 +2,10 @@ package service
 
 import (
 	"errors"
+
 	"github.com/dgb8901/go-wechat-miniapp-sdk/common"
 	"github.com/dgb8901/go-wechat-miniapp-sdk/models"
 	"github.com/dgb8901/go-wechat-miniapp-sdk/models/request"
-	"log"
 )
 
 const (
@@ -13,25 +13,27 @@ const (
 	subscribeMessageUrl string = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send"
 )
 
-type wxaSubscribeMsgService struct {
+type WxaSubscribeMsgService struct {
 	wxaService *WxaService
 }
 
+func newWxaSubscribeMsgService(service *WxaService) *WxaSubscribeMsgService {
+	return &WxaSubscribeMsgService{wxaService: service}
+}
+
 // Send 发送订阅消息
-func (msg *wxaSubscribeMsgService) Send(subMsg *request.SubscribeMsg) (*models.WxError, error) {
+func (s *WxaSubscribeMsgService) Send(subMsg *request.SubscribeMsg) (*models.WxError, error) {
 	var result models.WxError
 	data := common.JsonToMap(common.ToJson(subMsg))
-	err := msg.wxaService.Post(subscribeMessageUrl, &data, &result)
+	err := s.wxaService.Post(subscribeMessageUrl, &data, &result)
 
 	if err != nil {
-		err = errors.New("Failed to send subscription message：" + err.Error())
-		log.Printf("Failed to send subscription message：%s", err.Error())
+		err = errors.New("Failed to send subscription message: " + err.Error())
 		return nil, err
 	}
 
 	if result.ErrCode != 0 {
 		err = errors.New(result.ErrMsg)
-		log.Printf(result.ErrMsg)
 		return nil, err
 	}
 

@@ -3,40 +3,48 @@ package service
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/astaxie/beego/httplib"
 	"github.com/dgb8901/go-wechat-miniapp-sdk/config"
 	"github.com/dgb8901/go-wechat-miniapp-sdk/models/response"
-	"log"
-	"strings"
 )
 
-var services = make(map[string]interface{})
-
 type WxaService struct {
-	cfg config.Config
+	cfg      config.CfgInterface
+	services map[string]interface{}
 }
 
-func NewService(cfg config.Config) *WxaService {
-	return &WxaService{cfg: cfg}
+func NewInMemoryService(cfg *config.Config) *WxaService {
+	return &WxaService{
+		cfg:      config.NewInMemory(cfg),
+		services: make(map[string]interface{}),
+	}
 }
 
-func (wxa *WxaService) Get(url string, params *map[string]interface{}, resp interface{}) error {
-	return wxa.execute(GET, url, params, resp)
+func NewInRedisService(cfg *config.Config) *WxaService {
+	return &WxaService{
+		cfg:      config.NewInRedis(cfg),
+		services: make(map[string]interface{}),
+	}
 }
 
-func (wxa *WxaService) Post(url string, data *map[string]interface{}, resp interface{}) error {
-	return wxa.execute(POST, url, data, resp)
+func (s *WxaService) Get(url string, params *map[string]interface{}, resp interface{}) error {
+	return s.execute(GET, url, params, resp)
 }
 
-func (wxa *WxaService) GetFile(url string, params *map[string]interface{}) ([]byte, error) {
+func (s *WxaService) Post(url string, data *map[string]interface{}, resp interface{}) error {
+	return s.execute(POST, url, data, resp)
+}
+
+func (s *WxaService) GetFile(url string, params *map[string]interface{}) ([]byte, error) {
 	var err error
 	if strings.Contains(url, "access_token=") {
-		err = errors.New("The uri can't concat symbol access_token:" + url)
-		log.Printf("The uri can't concat symbol access_token:%s", url)
+		err = errors.New("The uri can't concat symbol access_token: " + url)
 		return nil, err
 	}
 
-	accessToken, err := wxa.GetAccessToken()
+	accessToken, err := s.GetAccessToken()
 	if err != nil {
 		return nil, err
 	}
@@ -59,15 +67,14 @@ func (wxa *WxaService) GetFile(url string, params *map[string]interface{}) ([]by
 	return resp, err
 }
 
-func (wxa *WxaService) PostFile(url string, data *map[string]interface{}) ([]byte, error) {
+func (s *WxaService) PostFile(url string, data *map[string]interface{}) ([]byte, error) {
 	var err error
 	if strings.Contains(url, "access_token=") {
-		err = errors.New("The uri can't concat symbol access_token:%s" + url)
-		log.Printf("The uri can't concat symbol access_token:%s", url)
+		err = errors.New("The uri can't concat symbol access_token: " + url)
 		return nil, err
 	}
 
-	accessToken, err := wxa.GetAccessToken()
+	accessToken, err := s.GetAccessToken()
 	if err != nil {
 		return nil, err
 	}
@@ -88,16 +95,15 @@ func (wxa *WxaService) PostFile(url string, data *map[string]interface{}) ([]byt
 	return resp, err
 }
 
-func (wxa *WxaService) execute(method string, uri string, params *map[string]interface{}, resp interface{}) error {
+func (s *WxaService) execute(method string, uri string, params *map[string]interface{}, resp interface{}) error {
 
 	var err error
 	if strings.Contains(uri, "access_token=") {
-		err = errors.New("The uri can't concat symbol access_token:%s" + uri)
-		log.Printf("The uri can't concat symbol access_token:%s", uri)
+		err = errors.New("The uri can't concat symbol access_token: " + uri)
 		return err
 	}
 
-	accessToken, err := wxa.GetAccessToken()
+	accessToken, err := s.GetAccessToken()
 	if err != nil {
 		return err
 	}
@@ -123,94 +129,92 @@ func (wxa *WxaService) execute(method string, uri string, params *map[string]int
 
 	if err != nil {
 		err = errors.New("request failure: %s" + err.Error())
-		log.Printf("request failure: %s", err.Error())
 		return err
 	}
 	return nil
 }
 
 // GetAccessToken 获取access_token
-func (wxa *WxaService) GetAccessToken() (string, error) {
+func (s *WxaService) GetAccessToken() (string, error) {
 
-	if !wxa.cfg.IsAccessTokenExpired() {
-		return wxa.cfg.GetAccessToken(), nil
+	if !s.cfg.IsAccessTokenExpired() {
+		return s.cfg.GetAccessToken(), nil
 	}
 
 	lock.Lock()
 	defer lock.Unlock()
 
-	url := fmt.Sprintf(getAccessTokenUrl, wxa.cfg.GetAppId(), wxa.cfg.GetSecret())
+	url := fmt.Sprintf(getAccessTokenUrl, s.cfg.GetAppId(), s.cfg.GetSecret())
 
 	request := httplib.Get(url)
 	request.Retries(3)
 	accessToken := &response.WxaAccessToken{}
 	err := request.ToJSON(accessToken)
 	if err != nil {
-		err = errors.New("request failure：%s" + err.Error())
-		log.Printf("request failure：%s", err.Error())
+		err = errors.New("request failure: %s" + err.Error())
 		return "", err
 	}
 	if accessToken.ErrCode != 0 {
 		err = errors.New(accessToken.ErrMsg)
-		log.Printf(accessToken.ErrMsg)
 		return "", err
 	}
 
-	wxa.cfg.UpdateAccessToken(accessToken.AccessToken, accessToken.ExpiresIn)
+	s.cfg.UpdateAccessToken(accessToken.AccessToken, accessToken.ExpiresIn)
 
 	return accessToken.AccessToken, err
 }
 
-func (wxa *WxaService) CheckSignature(timestamp string, nonce string, signature string) bool {
+func (s *WxaService) CheckSignature(timestamp string, nonce string, signature string) bool {
+	// TODO check signature
 	return false
 }
 
-func (wxa *WxaService) GetUserService() *wxaUserService {
-	userService := services["userService"]
+func (s *WxaService) GetUserService() *WxaUserService {
+	userService := s.services["userService"]
 	if userService == nil {
-		userService = &wxaUserService{wxaService: wxa}
-		services["userService"] = userService
+		userService = newWxaUserService(s)
+		s.services["userService"] = userService
 	}
-	service := userService.(*wxaUserService)
+	service := userService.(*WxaUserService)
 	return service
 }
 
-func (wxa *WxaService) GetSubscribeMsgService() *wxaSubscribeMsgService {
-	subscribeMsgService := services["subscribeMsgService"]
+func (s *WxaService) GetSubscribeMsgService() *WxaSubscribeMsgService {
+	subscribeMsgService := s.services["subscribeMsgService"]
 	if subscribeMsgService == nil {
-		subscribeMsgService = &wxaSubscribeMsgService{wxaService: wxa}
-		services["subscribeMsgService"] = subscribeMsgService
+		subscribeMsgService = newWxaSubscribeMsgService(s)
+		s.services["subscribeMsgService"] = subscribeMsgService
 	}
-	service := subscribeMsgService.(*wxaSubscribeMsgService)
+	service := subscribeMsgService.(*WxaSubscribeMsgService)
 	return service
 }
 
-func (wxa *WxaService) GetKfService() *wxaKfService {
-	kfService := services["kfService"]
+func (s *WxaService) GetKfService() *WxaKfService {
+	kfService := s.services["kfService"]
 	if kfService == nil {
-		kfService = &wxaKfService{wxaService: wxa}
-		services["kfService"] = kfService
+		kfService = newWxaKfService(s)
+		s.services["kfService"] = kfService
 	}
-	service := kfService.(*wxaKfService)
+	service := kfService.(*WxaKfService)
 	return service
 }
 
-func (wxa *WxaService) GetUniformMessageService() *wxaUniformMessageService {
-	uniformMessageService := services["uniformMessageService"]
+func (s *WxaService) GetUniformMessageService() *WxaUniformMessageService {
+	uniformMessageService := s.services["uniformMessageService"]
 	if uniformMessageService == nil {
-		uniformMessageService = &wxaUniformMessageService{wxaService: wxa}
-		services["uniformMessageService"] = uniformMessageService
+		uniformMessageService = newWxaUniformMessageService(s)
+		s.services["uniformMessageService"] = uniformMessageService
 	}
-	service := uniformMessageService.(*wxaUniformMessageService)
+	service := uniformMessageService.(*WxaUniformMessageService)
 	return service
 }
 
-func (wxa *WxaService) GetQrCodeService() *wxaQrCodeService {
-	qrCodeService := services["qrCodeService"]
+func (s *WxaService) GetQrCodeService() *WxaQrCodeService {
+	qrCodeService := s.services["qrCodeService"]
 	if qrCodeService == nil {
-		qrCodeService = &wxaQrCodeService{wxaService: wxa}
-		services["qrCodeService"] = qrCodeService
+		qrCodeService = newWxaQrCodeService(s)
+		s.services["qrCodeService"] = qrCodeService
 	}
-	service := qrCodeService.(*wxaQrCodeService)
+	service := qrCodeService.(*WxaQrCodeService)
 	return service
 }

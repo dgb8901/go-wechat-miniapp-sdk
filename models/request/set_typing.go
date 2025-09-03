@@ -1,6 +1,6 @@
 package request
 
-// 下发客服当前输入状态请求参数
+// SetTyping 下发客服当前输入状态请求参数
 type SetTyping struct {
 	// 用户的 OpenID
 	ToUser string `json:"touser"`
