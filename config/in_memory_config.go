@@ -2,52 +2,52 @@ package config
 
 import "time"
 
-// 基于内存配置
-type wxaInMemoryConfig struct {
-	cfg         *Cfg
+// MemoryConfig 基于内存配置
+type MemoryConfig struct {
+	cfg         *Config
 	accessToken string
 	expiresTime int64
 }
 
-func NewInMemory(cfg *Cfg) *wxaInMemoryConfig {
-	return &wxaInMemoryConfig{cfg: cfg}
+func NewInMemory(cfg *Config) CfgInterface {
+	return &MemoryConfig{cfg: cfg}
 }
 
 // GetAppId 获取appid
-func (c *wxaInMemoryConfig) GetAppId() string {
+func (c *MemoryConfig) GetAppId() string {
 	return c.cfg.AppId
 }
 
 // GetSecret 获取Secret
-func (c *wxaInMemoryConfig) GetSecret() string {
+func (c *MemoryConfig) GetSecret() string {
 	return c.cfg.Secret
 }
 
 // GetAccessToken 获取access_token
-func (c *wxaInMemoryConfig) GetAccessToken() string {
+func (c *MemoryConfig) GetAccessToken() string {
 	return c.accessToken
 }
 
 // IsAccessTokenExpired access_token是否过期
-func (c *wxaInMemoryConfig) IsAccessTokenExpired() bool {
+func (c *MemoryConfig) IsAccessTokenExpired() bool {
 	return time.Now().Unix() > c.expiresTime
 }
 
 // ExpiredAccessToken 强制过期access_token
-func (c *wxaInMemoryConfig) ExpiredAccessToken() {
+func (c *MemoryConfig) ExpiredAccessToken() {
 	c.expiresTime = 0
 }
 
 // UpdateAccessToken 更新access_token
-func (c *wxaInMemoryConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
+func (c *MemoryConfig) UpdateAccessToken(accessToken string, expiresInSeconds int64) {
 	c.accessToken = accessToken
 	c.expiresTime = time.Now().Unix() + (expiresInSeconds - 200)
 }
 
-func (c *wxaInMemoryConfig) GetConfig() *Cfg {
+func (c *MemoryConfig) GetConfig() *Config {
 	return c.cfg
 }
 
-func (c *wxaInMemoryConfig) SetConfig(cfg *Cfg) {
+func (c *MemoryConfig) SetConfig(cfg *Config) {
 	c.cfg = cfg
 }

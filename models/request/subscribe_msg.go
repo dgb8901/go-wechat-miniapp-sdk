@@ -1,6 +1,6 @@
 package request
 
-// 订阅消息请求参数
+// SubscribeMsg 订阅消息请求参数
 type SubscribeMsg struct {
 	// 接收者（用户）的 openid
 	ToUser string `json:"touser"`

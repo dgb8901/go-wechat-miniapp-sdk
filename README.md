@@ -40,18 +40,18 @@ var helper = &wxaHelper{}
 
 func Init() {
 
-    cfg := &config.Cfg{
-        AppId:         "AppId",
-        Secret:        "Secret",
-        Token:         "Token",
-        AesKey:        "AesKey",
-        MsgDataFormat: "DataFormat",
-    }
-    // wxaConfig := config.NewInRedis(cfg,"127.0.0.1:6379","123456")
-    // wxaService := service.NewInRedis(redisConfig)
-    wxaConfig := config.NewInMemory(cfg)
-    wxaService := service.NewService(wxaConfig)
+	cfg := &config.Config{
+		AppId:         "",
+		Secret:        "",
+		Token:         "",
+		AesKey:        "",
+		MsgDataFormat: "JSON",
+		
+		Server: "",
+		Password: "",
+	}
 
+	wxaService := service.NewInMemoryService(cfg)
     helper.wxaService = wxaService
 }
 

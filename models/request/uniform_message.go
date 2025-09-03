@@ -1,6 +1,6 @@
 package request
 
-// 统一服务消息请求参数
+// UniformMessage 统一服务消息请求参数
 type UniformMessage struct {
 	// 用户openid，可以是小程序的openid，
 	// 也可以是mp_template_msg.appid对应的公众号的openid
@@ -13,7 +13,7 @@ type UniformMessage struct {
 	MpTemplateMsg *MpTemplateMsg `json:"mp_template_msg"`
 }
 
-// weapp_template_msg 的结构
+// WeappTemplateMsg weapp_template_msg 的结构
 type WeappTemplateMsg struct {
 	// 小程序模板ID
 	TemplateId string `json:"template_id"`
@@ -27,7 +27,7 @@ type WeappTemplateMsg struct {
 	EmphasisKeyword string `json:"emphasis_keyword"`
 }
 
-// mp_template_msg 的结构
+// MpTemplateMsg mp_template_msg 的结构
 type MpTemplateMsg struct {
 	// 公众号appid，要求与小程序有绑定且同主体
 	Appid string `json:"appid"`
