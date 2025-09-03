@@ -8,7 +8,7 @@
 
 #### 版本
 
-> 当前版本: [v1.0.1](https://github.com/dgb8901/go-wechat-miniapp-sdk/releases/tag/v1.0.1-release)
+> 当前版本: [v1.1.0](https://github.com/dgb8901/go-wechat-miniapp-sdk/releases/tag/v1.1.0)
 
 #### 运行环境
 
